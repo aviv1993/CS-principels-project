@@ -1,6 +1,9 @@
 const BfsAlgoObject = require("./bfs");
 const BfsAlgo = BfsAlgoObject.BfsAlgo;
 
+const DfsAlgoObject = require("./dfs");
+const DfsAlgo = DfsAlgoObject.DfsAlgo;
+
 const http = require("http");
 const server = http.createServer(function(request, response) {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -13,7 +16,7 @@ const server = http.createServer(function(request, response) {
     });
     request.on("end", function() {
       response.writeHead(200, { "Content-Type": "text/html" });
-      response.end(JSON.stringify({ Actions: respEnd }));
+      response.end(JSON.stringify(respEnd));
     });
   }
 });
@@ -131,5 +134,11 @@ const bfs = (row,col,startNode, targetNode, blockingNodes) => {
   return output;
 };
 
+const dfs = (row,col,startNode, targetNode, blockingNodes) => {
+  const dfs = new DfsAlgo(row, col, blockingNodes, startNode, targetNode);
+  const output = dfs.run();
+  return output;
+};
+ 
 const algoArrayFunctions = [naiveSort, bubbleSort, quickSortImple];
-const algoGraphFunctions = [bfs];
+const algoGraphFunctions = [bfs,dfs];

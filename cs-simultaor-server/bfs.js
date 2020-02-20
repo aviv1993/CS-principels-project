@@ -49,24 +49,17 @@ class BfsAlgo {
     const queue = [this.startNode];
     //Adding startnode to level 0 :
     this.output.push(this.startNode);
-    this.output.push([]);
+    //this.output.push([]);
 
     this.visited.add(
       this.startNode[0].toString + "," + this.startNode[1].toString()
     );
     while (queue.length > 0) {
       const currNode = queue.shift();
-      //currentNodesAmount -= 1;
       nextNodesAmount += this.addAllNeighboursNodes(currNode, queue, level);
-      /*if (currentNodesAmount == 0) {
-        level++;
-        currentNodesAmount = nextNodesAmount;
-        nextNodesAmount = 0;
-        //Adding next level to output:
-        this.output.push([]);
-      }*/
     }
-    return this.output;
+    this.output.push([0,0]);
+    return {actions:this.output, path:[]};
   }
 }
 

@@ -17,8 +17,14 @@ class Node extends Component {
       props.row.toString() + "," + props.col.toString()
     );
   };
+  isNextPathNode = props => {
+    return props.nextPathNodes.has(
+      props.row.toString() + "," + props.col.toString()
+    );
+  };
 
-  /*
+
+  
   shouldComponentUpdate(nextProps, nextState) {
     
     const changedStartNode =
@@ -29,8 +35,8 @@ class Node extends Component {
       this.props.targetNode[1] !== nextProps.targetNode[1];
     const key = nextProps.row.toString() + "," + nextProps.col.toString();
     const isBlockingNode = this.isBlocking !== nextProps.blockingNodes.has(key);
-    return isBlockingNode || changedStartNode || changedTargetNode;
-  }*/
+    return isBlockingNode || changedStartNode || changedTargetNode || this.isNextAlgoNode(nextProps);
+  }
 
   render() {
     return (
@@ -40,7 +46,9 @@ class Node extends Component {
             ? classes.StartNode
             : this.isTargetNode(this.props)
             ? classes.TargetNode
-            : this.isNextAlgoNode(this.props)
+            : this.isNextPathNode(this.props) 
+            ? classes.PathNode
+            : this.isNextAlgoNode(this.props) 
             ? classes.AlgoNode
             : this.isBlockingNode(this.props)
             ? classes.WeightedNode

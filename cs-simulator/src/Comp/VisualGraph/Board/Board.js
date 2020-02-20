@@ -16,6 +16,8 @@ const convertArray = (array, row, props) =>
       onNodeClick={props.onNodeClick}
       runningAlgo={props.runningAlgo}
       nextAlgoNodes={props.nextAlgoNodes}
+      isPathAlgo = {props.isPathAlgo}
+      nextPathNodes={props.nextPathNodes}
     />
   ));
 const getBoard = (board, props) =>

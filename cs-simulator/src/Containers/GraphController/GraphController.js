@@ -10,8 +10,10 @@ class GraphController extends Component {
     super(props);
     this.actions = [];
   }
+  
   rows=20;
   cols=30;
+
 
   initVertices = () => {
     return [...Array(this.rows).keys()].map(elem => [...Array(this.cols).keys()]);
@@ -19,19 +21,21 @@ class GraphController extends Component {
 
   state = {
     vertices: this.initVertices(),
-    startNode: [10,5],
-    targetNode: [10, 25],
+    startNode: [0,0],
+    targetNode: [1, 15],
     blockingNodes: new Set(),
     nextAlgoNodes: new Set(),
+    nextPathNodes: new Set(),
     //hovering booleans :
     hoveringOnNode: false,
     hoveringOnTargetNode: false,
     hoveringOnStartNode: false,
     //Run algo booleans :
     clickRunAlgo: false,
-    chosenAlgo: 0,
+    chosenAlgo: -1,
     mustChooseAlgo: false,
-    runningAlgo: false
+    runningAlgo: false,
+    runPathAlgo:false,
   };
 
   isStartNode = (row, col) =>
@@ -105,11 +109,19 @@ class GraphController extends Component {
       onNodeClick={this.nodeClicked}
       nextAlgoNodes={this.state.nextAlgoNodes}
       runningAlgo={this.state.runningAlgo}
+      isPathAlgo={this.state.runPathAlgo}
+      nextPathNodes={this.state.nextPathNodes}
     />
   );
 
   clickRunAlgo = () => {
     this.setState({ clickRunAlgo: true });
+  };
+
+  chooseAlgo = chosenIndex => {
+    const parsedIndex = parseInt(chosenIndex);
+    const prevIndex = this.state.chosenAlgo;
+    this.setState({ chosenAlgo: parsedIndex === prevIndex ? -1 : parsedIndex });
   };
 
   addControls = () => (
@@ -129,9 +141,13 @@ class GraphController extends Component {
     </div>
   );
 
-  startActions(actions) {
+  startActions(data) {
+    const actions = data['actions'];
+    const path = data['path'];
+
     if (this.state.chosenAlgo !== -1) {
-      this.actions = actions["Actions"].slice();
+      this.actions = actions.slice();
+      this.path=path.slice();
       this.setState({ clickRunAlgo: false, runningAlgo: true });
     } else if (this.state.chosenAlgo === -1) {
       this.setState({ clickRunAlgo: false, mustChooseAlgo: true });
@@ -139,13 +155,21 @@ class GraphController extends Component {
   }
 
   getKey = node => node[0] + "," + node[1];
-  runIteration() {
-    const nextNode = this.actions.shift();
-    const nextAlgoNodes = new Set(this.state.nextAlgoNodes);
+
+  runIteration(isPath) {
+    const nextNode =  isPath ? this.path.shift() :this.actions.shift();
+    const nextAlgoNodes = new Set(isPath ? this.state.nextPathNodes : this.state.nextAlgoNodes);
     nextAlgoNodes.add(this.getKey(nextNode));
-    if (this.actions.length > 0)
-      this.setState({ nextAlgoNodes: nextAlgoNodes });
-    else this.setState({ nextAlgoNode: nextAlgoNodes, runningAlgo: false });
+    if(isPath){
+      if (this.path.length > 0)
+        this.setState({ nextPathNodes: nextAlgoNodes });
+      else this.setState({ nextPathNodes: nextAlgoNodes, runningAlgo: false,runPathAlgo: false });
+    }
+    else{
+      if (this.actions.length > 0)
+        this.setState({ nextAlgoNodes: nextAlgoNodes });
+      else this.setState({ nextAlgoNode: nextAlgoNodes, runningAlgo: false,runPathAlgo: true });
+    }
   }
 
   componentDidUpdate() {
@@ -172,7 +196,10 @@ class GraphController extends Component {
       }
     }
     if (this.state.runningAlgo) {
-      setTimeout(() => this.runIteration(), 10);
+      setTimeout(() => this.runIteration(false), 5);
+    }
+    if(this.state.runPathAlgo){
+      setTimeout(() => this.runIteration(true), 5);
     }
   }
 }
