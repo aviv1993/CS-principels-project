@@ -1,0 +1,39 @@
+.BuildControl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1px 0px;
+  color: white;
+}
+
+.BuildControl button {
+  display: block;
+  font: inherit;
+  padding: 5px;
+  margin: 0 5px;
+  width: 80px;
+  border: 2px solid black;
+  cursor: pointer;
+  outline: none;
+  background-color: white;
+}
+
+.BuildControl button:hover {
+  background-color: grey;
+  border: 2px solid black;
+  color: black;
+}
+.Label {
+  padding: 5px;
+  font-weight: bold;
+  width: 60px;
+}
+
+.BuildControl input {
+  width: 30px;
+  margin: 1px 1px;
+}
+
+.BuildControl input:hover {
+  border: 1px solid black;
+}

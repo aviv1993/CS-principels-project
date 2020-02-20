@@ -1,0 +1,26 @@
+.AlgoControl button {
+  display: block;
+  font: inherit;
+  padding: 5px;
+  margin: 0 5px;
+  width: 80px;
+  border: 2px solid rgb(22, 22, 53);
+  cursor: pointer;
+  outline: none;
+  background-color: white;
+}
+.AlgoControl button:hover {
+  background-color: grey;
+  border: 2px solid black;
+}
+.Pressed button {
+  display: block;
+  font: inherit;
+  padding: 5px;
+  margin: 0 5px;
+  width: 80px;
+  border: 2px solid black;
+  cursor: pointer;
+  outline: none;
+  background-color: grey;
+}

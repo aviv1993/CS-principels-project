@@ -1,0 +1,9 @@
+.Board {
+  display: grid;
+  grid-template-columns:
+    auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto
+    auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto
+    auto auto auto auto auto auto auto auto auto auto auto auto;
+  background-color: white;
+  padding-top: 25px;
+}

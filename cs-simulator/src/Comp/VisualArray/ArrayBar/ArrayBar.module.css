@@ -1,0 +1,12 @@
+.ArrayBar {
+  color: black;
+  border: 1px solid black;
+  background-color: silver;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.Chosen {
+  background-color: grey;
+  border: 1px solid black;
+}

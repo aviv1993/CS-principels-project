@@ -1,0 +1,77 @@
+.Node {
+  background-color: (255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  text-align: center;
+}
+
+.StartNode {
+  background-color: green;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  text-align: center;
+  animation-name: startNode;
+  animation-duration: 1s;
+}
+
+.TargetNode {
+  background-color: red;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  text-align: center;
+  animation-name: targetNode;
+  animation-duration: 1s;
+}
+
+.WeightedNode {
+  background-color: rgb(29, 26, 26);
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  animation-name: weightedNode;
+  animation-duration: 1s;
+}
+
+.AlgoNode {
+  background-color: blue;
+  border: 1px solid grey;
+  padding: 15px;
+  text-align: center;
+  animation-name: algoNode;
+  animation-duration: 5s;
+}
+
+@keyframes weightedNode {
+  from {
+    background-color: rgb(170, 170, 170);
+  }
+  to {
+    background-color: rgb(29, 26, 26);
+  }
+}
+
+@keyframes startNode {
+  from {
+    background-color: rgb(156, 212, 151);
+  }
+  to {
+    background-color: green;
+  }
+}
+
+@keyframes targetNode {
+  from {
+    background-color: rgb(212, 151, 151);
+  }
+  to {
+    background-color: red;
+  }
+}
+
+@keyframes algoNode {
+  from {
+    background-color: rgb(183, 216, 243);
+  }
+  to {
+    background-color: blue;
+  }
+}

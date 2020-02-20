@@ -1,0 +1,9 @@
+.VisualizeArray {
+  margin-top: 4px;
+  width: 100%;
+  margin: auto;
+  height: 600px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
