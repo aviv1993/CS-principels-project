@@ -9,7 +9,7 @@
 .BuildControl button {
   display: block;
   font: inherit;
-  padding: 5px;
+  padding: 5%;
   margin: 0 5px;
   width: 80px;
   border: 2px solid black;
@@ -24,14 +24,14 @@
   color: black;
 }
 .Label {
-  padding: 5px;
+  padding: 2%;
   font-weight: bold;
   width: 60px;
 }
 
 .BuildControl input {
   width: 30px;
-  margin: 1px 1px;
+  margin: 2% 2%;
 }
 
 .BuildControl input:hover {

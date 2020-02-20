@@ -26,7 +26,10 @@ const handleData = data => {
       return [];
     }
   } else {
+    console.log(data["row"] + " " + data["col"]);
     return algoGraphFunctions[data["algo"]](
+      data["row"],
+      data["col"],
       data["startNode"],
       data["targetNode"],
       data["blockingNodes"]
@@ -122,10 +125,9 @@ function partition(items, left, right, actions) {
   return i;
 }
 
-const bfs = (startNode, targetNode, blockingNodes) => {
-  const bfs = new BfsAlgo(18, 44, blockingNodes, startNode, targetNode);
+const bfs = (row,col,startNode, targetNode, blockingNodes) => {
+  const bfs = new BfsAlgo(row, col, blockingNodes, startNode, targetNode);
   const output = bfs.run();
-  console.log(output.length);
   return output;
 };
 

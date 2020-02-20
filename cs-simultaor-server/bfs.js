@@ -20,7 +20,6 @@ class BfsAlgo {
       !this.blockingNodes.includes(key) &&
       !this.visited.has(key)
     ) {
-      console.log(row);
       this.visited.add(key);
       queue.push([row, col]);
       this.output.push([row, col]);

@@ -5,6 +5,9 @@ import Modal from "../../Comp/UI/Modal/Modal";
 import InputError from "../../Comp/InputErrors/InputError";
 import axios from "axios";
 
+
+const algoNames = ["Naive Sort", "Bubble Sort", "Quick Sort", "Merge Sort"];
+
 class ArrayBuilder extends Component {
   state = {
     array: [1, 4, 5, 6, 2, 12, 13, 16, 7, 2, 9, 7, 8, 9, 12, 1, 5, 7],
@@ -86,6 +89,7 @@ class ArrayBuilder extends Component {
         algoClickHandler={this.chooseAlgo}
         currAlgoIndex={this.state.chosenAlgo}
         clickRunHandler={this.clickRunAlgo}
+        algoNames={algoNames}
       />
     </div>
   );

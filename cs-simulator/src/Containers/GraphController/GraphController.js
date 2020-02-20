@@ -3,21 +3,24 @@ import Board from "../../Comp/VisualGraph/Board/Board";
 import BuildControls from "../../Comp/BuildControls/BuildControls";
 import axios from "axios";
 
+
+const algoNames = ["BFS","DFS","A*"];
 class GraphController extends Component {
   constructor(props) {
     super(props);
     this.actions = [];
   }
+  rows=20;
+  cols=30;
+
   initVertices = () => {
-    const rows = 44;
-    const cols = 18;
-    return [...Array(cols).keys()].map(elem => [...Array(rows).keys()]);
+    return [...Array(this.rows).keys()].map(elem => [...Array(this.cols).keys()]);
   };
 
   state = {
     vertices: this.initVertices(),
-    startNode: [9, 5],
-    targetNode: [9, 40],
+    startNode: [10,5],
+    targetNode: [10, 25],
     blockingNodes: new Set(),
     nextAlgoNodes: new Set(),
     //hovering booleans :
@@ -38,13 +41,14 @@ class GraphController extends Component {
 
   //Handels a single click on a given node.
   nodeClicked = (row, col) => {
+    
     if (!this.isStartNode(row, col) && !this.isTargetNode(row, col)) {
       const blockingNodes = new Set(this.state.blockingNodes);
       const key = row.toString() + "," + col.toString();
       blockingNodes.has(key)
         ? blockingNodes.delete(key)
         : blockingNodes.add(key);
-      this.setState({ blockingNodes: blockingNodes });
+      this.setState({ blockingNodes: blockingNodes, hoveringOnNode:false, hoveringOnStartNode:false, hoveringOnTargetNode:false});
     }
   };
 
@@ -54,8 +58,9 @@ class GraphController extends Component {
   */
   nodeClickHandler = (row, col) => {
     if (this.state.hoveringOnNode) {
-      if (this.state.hoveringOnStartNode)
+      if (this.state.hoveringOnStartNode){
         this.setState({ startNode: [row, col] });
+      }
       else if (this.state.hoveringOnTargetNode)
         this.setState({ targetNode: [row, col] });
       else {
@@ -68,8 +73,8 @@ class GraphController extends Component {
     }
   };
 
-  //Activate hovering mode, dependes on which node the hover starts
-  hoveringOnNodes = (row, col) => {
+  //Activate and disabling hovering mode, dependes on which node the hover starts
+  hoveringOnNodes = (row, col,simple) => {
     const hoverOnNode = !this.state.hoveringOnNode;
     const hoveringOnStartNode = this.isStartNode(row, col) && hoverOnNode;
     const hoveringOnTargetNode = this.isTargetNode(row, col) && hoverOnNode;
@@ -113,6 +118,7 @@ class GraphController extends Component {
         algoClickHandler={this.chooseAlgo}
         currAlgoIndex={this.state.chosenAlgo}
         clickRunHandler={this.clickRunAlgo}
+        algoNames = {algoNames}
       />
     </div>
   );
@@ -156,7 +162,9 @@ class GraphController extends Component {
               startNode: this.state.startNode,
               targetNode: this.state.targetNode,
               isArray: false,
-              isGraph: true
+              isGraph: true,
+              row: this.rows,
+              col:this.cols
             })
           )
           .then(repsonse => this.startActions(repsonse.data))

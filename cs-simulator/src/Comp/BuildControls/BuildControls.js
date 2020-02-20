@@ -6,8 +6,8 @@ import classes2 from "./AlgoControl/AlgoControl.module.css";
 
 const algoButtons = ["Naive Sort", "Bubble Sort", "Quick Sort", "Merge Sort"];
 
-const getAlgoButtons = (currIndex, handler) =>
-  algoButtons.map((name, i) => (
+const getAlgoButtons = (currIndex, handler,algoNames) =>
+  algoNames.map((name, i) => (
     <AlgoControl
       key={name}
       algoIndex={i.toString()}
@@ -30,7 +30,7 @@ const buildControls = props => {
         />
       )}
       <div style={{ display: "flex" }}>
-        {getAlgoButtons(props.currAlgoIndex, props.algoClickHandler)}
+        {getAlgoButtons(props.currAlgoIndex, props.algoClickHandler,props.algoNames)}
       </div>
       <div className={classes2.AlgoControl}>
         <button onClick={props.clickRunHandler}>RUN!</button>
