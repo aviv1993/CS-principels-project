@@ -36,7 +36,7 @@ class DfsAlgo {
     const path = [];
     let currNode = this.targetNode;
     let prevNode = this.memo[currNode[0]][currNode[1]];
-    while(prevNode[0]!=this.startNode[0] || prevNode[1]!=this.startNode[1]){
+    while(currNode[0]!=this.startNode[0] || currNode[1]!=this.startNode[1]){
       path.push(currNode.slice());
       currNode=prevNode;
       prevNode=this.memo[currNode[0]][currNode[1]];  
@@ -49,6 +49,7 @@ class DfsAlgo {
     const path = this.memo[this.targetNode[0]][this.targetNode[1]].length===0 ? [] : this.getTargetPath()
     this.output.push([0,0]);
     path.push([0,0])
+    //console.log(this.memo[0][2])
     return { actions: this.output, path:path.reverse() };
   }
 }
@@ -56,6 +57,8 @@ class DfsAlgo {
 module.exports = { DfsAlgo: DfsAlgo };
 //Running example:
 /*
+
+
    0 1 2 3 4 5
  0 * * * * * *
  1 * s * * t *
@@ -67,7 +70,6 @@ set = new Set();
 set.add(2 + "," + 0);
 set.add(1 + "," + 0);
 set.add(2 + "," + 4);
-dfs = new DfsAlgo(4, 6, [], [1, 1], [1,4]);
-dfs.run();
-
+dfs = new DfsAlgo(1, 30, [], [0, 0], [0,15]);
+console.log(dfs.run()['path']);
 */

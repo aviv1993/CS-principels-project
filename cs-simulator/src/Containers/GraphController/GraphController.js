@@ -4,6 +4,12 @@ import BuildControls from "../../Comp/BuildControls/BuildControls";
 import axios from "axios";
 
 
+const SIMPLE_NODE = 0;
+const BLOCK_NODE = 1;
+const ALGO_NODE = 2;
+const PATH_NODE = 3;
+
+
 const algoNames = ["BFS","DFS","A*"];
 class GraphController extends Component {
   constructor(props) {
@@ -16,13 +22,13 @@ class GraphController extends Component {
 
 
   initVertices = () => {
-    return [...Array(this.rows).keys()].map(elem => [...Array(this.cols).keys()]);
+    return [...Array(this.rows)].map(x=>Array(this.cols).fill(0));
   };
 
   state = {
     vertices: this.initVertices(),
     startNode: [0,0],
-    targetNode: [1, 15],
+    targetNode: [0, 15],
     blockingNodes: new Set(),
     nextAlgoNodes: new Set(),
     nextPathNodes: new Set(),
@@ -47,12 +53,16 @@ class GraphController extends Component {
   nodeClicked = (row, col) => {
     
     if (!this.isStartNode(row, col) && !this.isTargetNode(row, col)) {
-      const blockingNodes = new Set(this.state.blockingNodes);
+      const val = this.state.vertices[row][col]==1 ? SIMPLE_NODE : BLOCK_NODE;
+      const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
+      newVertices[row][col]=val;
+      this.setState({vertices:newVertices});
+      /*const blockingNodes = new Set(this.state.blockingNodes);
       const key = row.toString() + "," + col.toString();
       blockingNodes.has(key)
         ? blockingNodes.delete(key)
         : blockingNodes.add(key);
-      this.setState({ blockingNodes: blockingNodes, hoveringOnNode:false, hoveringOnStartNode:false, hoveringOnTargetNode:false});
+      this.setState({ blockingNodes: blockingNodes, hoveringOnNode:false, hoveringOnStartNode:false, hoveringOnTargetNode:false});*/
     }
   };
 
@@ -68,11 +78,16 @@ class GraphController extends Component {
       else if (this.state.hoveringOnTargetNode)
         this.setState({ targetNode: [row, col] });
       else {
+        const val = this.state.vertices[row][col]==BLOCK_NODE ? SIMPLE_NODE : BLOCK_NODE;
+        const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
+        newVertices[row][col]=val;
+        this.setState({vertices:newVertices});
+        /*
         const blockingNodes = new Set(this.state.blockingNodes);
         const key = row.toString() + "," + col.toString();
         if (!blockingNodes.has(key)) blockingNodes.add(key);
         else blockingNodes.delete(key);
-        this.setState({ blockingNodes: blockingNodes });
+        this.setState({ blockingNodes: blockingNodes });*/
       }
     }
   };
@@ -144,6 +159,7 @@ class GraphController extends Component {
   startActions(data) {
     const actions = data['actions'];
     const path = data['path'];
+    console.log(path);
 
     if (this.state.chosenAlgo !== -1) {
       this.actions = actions.slice();
@@ -156,8 +172,28 @@ class GraphController extends Component {
 
   getKey = node => node[0] + "," + node[1];
 
+  /*
+  1 - blocking
+  2 - algo node
+  3 - path
+
+  */
   runIteration(isPath) {
-    const nextNode =  isPath ? this.path.shift() :this.actions.shift();
+    const currentArray = isPath ? this.path :this.actions;
+    const nextNode =  currentArray.shift();
+    const nodeVal = isPath ? PATH_NODE: ALGO_NODE; 
+    const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
+    newVertices[nextNode[0]][nextNode[1]] = nodeVal
+    if(currentArray.length>0){
+      this.setState({vertices:newVertices});
+    }
+    else{
+      if(isPath)
+        this.setState({vertices:newVertices, runningAlgo: false,runPathAlgo: false});
+      else
+        this.setState({vertices:newVertices, runningAlgo: false,runPathAlgo: true});
+    }
+    /*
     const nextAlgoNodes = new Set(isPath ? this.state.nextPathNodes : this.state.nextAlgoNodes);
     nextAlgoNodes.add(this.getKey(nextNode));
     if(isPath){
@@ -169,7 +205,7 @@ class GraphController extends Component {
       if (this.actions.length > 0)
         this.setState({ nextAlgoNodes: nextAlgoNodes });
       else this.setState({ nextAlgoNode: nextAlgoNodes, runningAlgo: false,runPathAlgo: true });
-    }
+    }*/
   }
 
   componentDidUpdate() {

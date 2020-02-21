@@ -18,6 +18,7 @@ const convertArray = (array, row, props) =>
       nextAlgoNodes={props.nextAlgoNodes}
       isPathAlgo = {props.isPathAlgo}
       nextPathNodes={props.nextPathNodes}
+      vertices = {props.board}
     />
   ));
 const getBoard = (board, props) =>

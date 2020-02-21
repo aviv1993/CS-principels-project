@@ -7,36 +7,38 @@ class Node extends Component {
   isTargetNode = props =>
     props.row === props.targetNode[0] && props.col === props.targetNode[1];
   isBlockingNode = props => {
+    this.isBlocking = props.vertices[props.row][props.col]===1;
+    /*
     this.isBlocking = props.blockingNodes.has(
       props.row.toString() + "," + props.col.toString()
-    );
+    );*/
     return this.isBlocking;
   };
-  isNextAlgoNode = props => {
+  isNextAlgoNode = props => props.vertices[props.row][props.col]===2;/*{
     return props.nextAlgoNodes.has(
       props.row.toString() + "," + props.col.toString()
     );
-  };
-  isNextPathNode = props => {
+  };*/
+  isNextPathNode = props => props.vertices[props.row][props.col]===3/*{
     return props.nextPathNodes.has(
       props.row.toString() + "," + props.col.toString()
     );
-  };
+  };*/
 
 
   
-  shouldComponentUpdate(nextProps, nextState) {
+//  shouldComponentUpdate(nextProps, nextState) {
     
-    const changedStartNode =
-      this.props.startNode[0] !== nextProps.startNode[0] ||
-      this.props.startNode[1] !== nextProps.startNode[1];
-    const changedTargetNode =
+//    const changedStartNode = this.isStartNode(nextProps)!==this.isStartNode(this.props);/*
+//      this.props.startNode[0] !== nextProps.startNode[0] ||
+ //     this.props.startNode[1] !== nextProps.startNode[1];*/
+ //   const changedTargetNode =this.isTargetNode(nextProps)!==this.isTargetNode(this.props);
+    /*
       this.props.targetNode[0] !== nextProps.targetNode[0] ||
-      this.props.targetNode[1] !== nextProps.targetNode[1];
-    const key = nextProps.row.toString() + "," + nextProps.col.toString();
-    const isBlockingNode = this.isBlocking !== nextProps.blockingNodes.has(key);
-    return isBlockingNode || changedStartNode || changedTargetNode || this.isNextAlgoNode(nextProps);
-  }
+      this.props.targetNode[1] !== nextProps.targetNode[1];*/
+    //const isBlockingNode = this.isBlocking !== nextProps.blockingNodes.has(key);
+//    return changedStartNode || changedTargetNode || this.isBlocking !== this.isBlockingNode(nextProps) ||this.isNextPathNode(nextProps)!=this.isNextPathNode(nextProps) || this.isNextPathNode(this.props)!==this.isNextPathNode(nextProps);
+//  }
 
   render() {
     return (
