@@ -5,9 +5,11 @@ import axios from "axios";
 
 
 const SIMPLE_NODE = 0;
-const BLOCK_NODE = 1;
-const ALGO_NODE = 2;
-const PATH_NODE = 3;
+const START_NODE = 1;
+const TARGET_NODE = 2;
+const BLOCK_NODE = 3;
+const ALGO_NODE = 4;
+const PATH_NODE = 5;
 
 
 const algoNames = ["BFS","DFS","A*"];
@@ -22,16 +24,19 @@ class GraphController extends Component {
 
 
   initVertices = () => {
-    return [...Array(this.rows)].map(x=>Array(this.cols).fill(0));
+    const vertices = [...Array(this.rows)].map(x=>Array(this.cols).fill(0));
+    vertices[0][0]=START_NODE;
+    vertices[0][15]=TARGET_NODE;
+    return vertices;
   };
 
   state = {
     vertices: this.initVertices(),
     startNode: [0,0],
     targetNode: [0, 15],
-    blockingNodes: new Set(),
+    /*blockingNodes: new Set(),
     nextAlgoNodes: new Set(),
-    nextPathNodes: new Set(),
+    nextPathNodes: new Set(),*/
     //hovering booleans :
     hoveringOnNode: false,
     hoveringOnTargetNode: false,
@@ -49,20 +54,13 @@ class GraphController extends Component {
   isTargetNode = (row, col) =>
     this.state.targetNode[0] === row && this.state.targetNode[1] === col;
 
-  //Handels a single click on a given node.
+  //Handels a single click on a single node.
   nodeClicked = (row, col) => {
-    
     if (!this.isStartNode(row, col) && !this.isTargetNode(row, col)) {
-      const val = this.state.vertices[row][col]==1 ? SIMPLE_NODE : BLOCK_NODE;
+      const val = this.state.vertices[row][col]===1 ? SIMPLE_NODE : BLOCK_NODE;
       const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
       newVertices[row][col]=val;
       this.setState({vertices:newVertices});
-      /*const blockingNodes = new Set(this.state.blockingNodes);
-      const key = row.toString() + "," + col.toString();
-      blockingNodes.has(key)
-        ? blockingNodes.delete(key)
-        : blockingNodes.add(key);
-      this.setState({ blockingNodes: blockingNodes, hoveringOnNode:false, hoveringOnStartNode:false, hoveringOnTargetNode:false});*/
     }
   };
 
@@ -72,22 +70,21 @@ class GraphController extends Component {
   */
   nodeClickHandler = (row, col) => {
     if (this.state.hoveringOnNode) {
+      const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
+      const val = this.state.hoveringOnStartNode ? START_NODE : this.state.hoveringOnTargetNode ?  TARGET_NODE : this.state.vertices[row][col]===BLOCK_NODE ? SIMPLE_NODE : BLOCK_NODE;
       if (this.state.hoveringOnStartNode){
-        this.setState({ startNode: [row, col] });
+        newVertices[this.state.startNode[0]][this.state.startNode[1]]=SIMPLE_NODE;
+        newVertices[row][col]=val;
+        this.setState({ startNode:[row,col], vertices:newVertices });
       }
-      else if (this.state.hoveringOnTargetNode)
-        this.setState({ targetNode: [row, col] });
-      else {
-        const val = this.state.vertices[row][col]==BLOCK_NODE ? SIMPLE_NODE : BLOCK_NODE;
-        const newVertices = this.state.vertices.map((elem) => elem.slice()).slice();
+      else if (this.state.hoveringOnTargetNode){
+        newVertices[this.state.targetNode[0]][this.state.targetNode[1]]=SIMPLE_NODE;
+        newVertices[row][col]=val;
+        this.setState({targetNode:[row,col], vertices:newVertices });
+      }
+      else if(!this.isStartNode(row,col) && !this.isTargetNode(row,col)){
         newVertices[row][col]=val;
         this.setState({vertices:newVertices});
-        /*
-        const blockingNodes = new Set(this.state.blockingNodes);
-        const key = row.toString() + "," + col.toString();
-        if (!blockingNodes.has(key)) blockingNodes.add(key);
-        else blockingNodes.delete(key);
-        this.setState({ blockingNodes: blockingNodes });*/
       }
     }
   };
@@ -115,17 +112,17 @@ class GraphController extends Component {
   getBoard = () => (
     <Board
       mouseLeave={this.mouseLeave}
-      startNode={this.state.startNode}
-      targetNode={this.state.targetNode}
+      //startNode={this.state.startNode}
+      //targetNode={this.state.targetNode}
       board={this.state.vertices}
       nodeClickHandler={this.nodeClickHandler}
-      blockingNodes={this.state.blockingNodes}
+      //blockingNodes={this.state.blockingNodes}
       mouseHovering={this.hoveringOnNodes}
       onNodeClick={this.nodeClicked}
-      nextAlgoNodes={this.state.nextAlgoNodes}
+     // nextAlgoNodes={this.state.nextAlgoNodes}
       runningAlgo={this.state.runningAlgo}
       isPathAlgo={this.state.runPathAlgo}
-      nextPathNodes={this.state.nextPathNodes}
+      //nextPathNodes={this.state.nextPathNodes}
     />
   );
 
