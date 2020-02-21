@@ -1,13 +1,15 @@
+const BLOCK_NODE = 3;
+
 class BfsAlgo {
-  constructor(row, col, blockingNodes, startNode, targetNode) {
+  constructor(row, col, vertices, startNode, targetNode) {
     this.row = row;
     this.col = col;
     this.visited = new Set();
-    this.blockingNodes = blockingNodes;
+    this.vertices = vertices;
     this.startNode = startNode;
     this.targetNode = targetNode;
     this.output = [];
-    this.memo = [...Array(this.row)].map(x=>Array(this.col).fill([]))       
+    this.memo = [...Array(this.row)].map(x => Array(this.col).fill([]));
   }
 
   isLegalNode(row, col) {
@@ -18,10 +20,10 @@ class BfsAlgo {
     const key = row.toString() + "," + col.toString();
     if (
       this.isLegalNode(row, col) &&
-      !this.blockingNodes.includes(key) &&
+      this.vertices[row][col] !== BLOCK_NODE &&
       !this.visited.has(key)
     ) {
-      this.memo[row][col] = [currNode[0],currNode[1]];
+      this.memo[row][col] = [currNode[0], currNode[1]];
       this.visited.add(key);
       queue.push([row, col]);
       this.output.push([row, col]);
@@ -33,25 +35,52 @@ class BfsAlgo {
     const row = currNode[0];
     const col = currNode[1];
     let addedNodes = 0;
-    addedNodes += this.addSingleNeighbour(currNode, row - 1, col - 1, queue, level);
+    addedNodes += this.addSingleNeighbour(
+      currNode,
+      row - 1,
+      col - 1,
+      queue,
+      level
+    );
     addedNodes += this.addSingleNeighbour(currNode, row - 1, col, queue, level);
-    addedNodes += this.addSingleNeighbour(currNode, row - 1, col + 1, queue, level);
+    addedNodes += this.addSingleNeighbour(
+      currNode,
+      row - 1,
+      col + 1,
+      queue,
+      level
+    );
     addedNodes += this.addSingleNeighbour(currNode, row, col - 1, queue, level);
     addedNodes += this.addSingleNeighbour(currNode, row, col + 1, queue, level);
-    addedNodes += this.addSingleNeighbour(currNode, row + 1, col - 1, queue, level);
+    addedNodes += this.addSingleNeighbour(
+      currNode,
+      row + 1,
+      col - 1,
+      queue,
+      level
+    );
     addedNodes += this.addSingleNeighbour(currNode, row + 1, col, queue, level);
-    addedNodes += this.addSingleNeighbour(currNode, row + 1, col + 1, queue, level);
+    addedNodes += this.addSingleNeighbour(
+      currNode,
+      row + 1,
+      col + 1,
+      queue,
+      level
+    );
     return addedNodes;
   }
 
-  getTargetPath(){
+  getTargetPath() {
     const path = [];
     let currNode = this.targetNode;
     let prevNode = this.memo[currNode[0]][currNode[1]];
-    while(currNode[0]!=this.startNode[0] || currNode[1]!=this.startNode[1]){
+    while (
+      currNode[0] != this.startNode[0] ||
+      currNode[1] != this.startNode[1]
+    ) {
       path.push(currNode.slice());
-      currNode=prevNode;
-      prevNode=this.memo[currNode[0]][currNode[1]];  
+      currNode = prevNode;
+      prevNode = this.memo[currNode[0]][currNode[1]];
     }
     return path;
   }
@@ -71,10 +100,12 @@ class BfsAlgo {
       const currNode = queue.shift();
       nextNodesAmount += this.addAllNeighboursNodes(currNode, queue, level);
     }
-    //Padding :
-    this.output.push([0,0]);
-    const path = this.memo[this.targetNode[0]][this.targetNode[1]].length===0 ? [] : this.getTargetPath();
-    return {actions:this.output, path:path.reverse()};
+
+    const path =
+      this.memo[this.targetNode[0]][this.targetNode[1]].length === 0
+        ? []
+        : this.getTargetPath();
+    return { actions: this.output, path: path.reverse() };
   }
 }
 

@@ -8,17 +8,12 @@ const convertArray = (array, row, props) =>
       key={[row, col]}
       row={row}
       col={col}
-      startNode={props.startNode}
-      targetNode={props.targetNode}
       nodeClickHandler={props.nodeClickHandler}
-      blockingNodes={props.blockingNodes}
       mouseHover={props.mouseHovering}
       onNodeClick={props.onNodeClick}
       runningAlgo={props.runningAlgo}
-      nextAlgoNodes={props.nextAlgoNodes}
-      isPathAlgo = {props.isPathAlgo}
-      nextPathNodes={props.nextPathNodes}
-      vertices = {props.board}
+      isPathAlgo={props.isPathAlgo}
+      vertices={props.board}
     />
   ));
 const getBoard = (board, props) =>

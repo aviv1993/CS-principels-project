@@ -1,13 +1,17 @@
 import React from "react";
 import classes from "./ArrayBar.module.css";
-
+import {
+  MAX_BAR,
+  BAR_WIDTH
+} from "../../../Containers/ArrayController/constants";
 const maxValue = 30;
 const width = 44;
 
 const arrayBar = props => {
+  const height = props.num <= MAX_BAR ? props.num * 20 + MAX_BAR : MAX_BAR * 21;
   const style = {
-    height: props.num <= maxValue ? props.num * 20 + maxValue : maxValue * 21,
-    width: width
+    height: height,
+    width: BAR_WIDTH
   };
   const isChosenAndMarked =
     props.runningAlgo &&

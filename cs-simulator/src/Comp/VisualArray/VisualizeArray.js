@@ -22,6 +22,7 @@ const visualArray = props => {
         props.runningAlgo,
         props.currentActions
       )}
+      <div style={{ height: "600px" }}></div>
     </div>
   );
 };

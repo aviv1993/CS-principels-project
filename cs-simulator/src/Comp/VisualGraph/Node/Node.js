@@ -1,56 +1,29 @@
 import React, { Component } from "react";
 import classes from "./Node.module.css";
-
-
-const SIMPLE_NODE = 0;
-const START_NODE = 1;
-const TARGET_NODE = 2;
-const BLOCK_NODE = 3;
-const ALGO_NODE = 4;
-const PATH_NODE = 5;
+import {
+  START_NODE,
+  TARGET_NODE,
+  BLOCK_NODE,
+  ALGO_NODE,
+  PATH_NODE
+} from "../../../Containers/GraphController/Constants";
 
 class Node extends Component {
-  isStartNode = props =>
-    props.vertices[props.row][props.col]===START_NODE;
-    //props.row === props.startNode[0] && props.col === props.startNode[1];
-  isTargetNode = props =>
-    props.vertices[props.row][props.col]===TARGET_NODE;
-    //props.row === props.targetNode[0] && props.col === props.targetNode[1];
+  isStartNode = props => props.vertices[props.row][props.col] === START_NODE;
+  isTargetNode = props => props.vertices[props.row][props.col] === TARGET_NODE;
   isBlockingNode = props => {
-    this.isBlocking = props.vertices[props.row][props.col]===BLOCK_NODE;
-    /*
-    this.isBlocking = props.blockingNodes.has(
-      props.row.toString() + "," + props.col.toString()
-    );*/
+    this.isBlocking = props.vertices[props.row][props.col] === BLOCK_NODE;
     return this.isBlocking;
   };
-  isNextAlgoNode = props => props.vertices[props.row][props.col]===ALGO_NODE;/*{
-    return props.nextAlgoNodes.has(
-      props.row.toString() + "," + props.col.toString()
-    );
-  };*/
-  isNextPathNode = props => props.vertices[props.row][props.col]===PATH_NODE/*{
-    return props.nextPathNodes.has(
-      props.row.toString() + "," + props.col.toString()
-    );
-  };*/
+  isNextAlgoNode = props => props.vertices[props.row][props.col] === ALGO_NODE;
+  isNextPathNode = props => props.vertices[props.row][props.col] === PATH_NODE;
 
-
-  
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.vertices[this.props.row][this.props.col] !== this.props.vertices[this.props.row][this.props.col]
-    /*
-    const changedStartNode = this.isStartNode(nextProps)!==this.isStartNode(this.props);
-      this.props.startNode[0] !== nextProps.startNode[0] ||
-      this.props.startNode[1] !== nextProps.startNode[1];
-    const changedTargetNode =this.isTargetNode(nextProps)!==this.isTargetNode(this.props);
-    
-      this.props.targetNode[0] !== nextProps.targetNode[0] ||
-      this.props.targetNode[1] !== nextProps.targetNode[1];
-    return changedStartNode || changedTargetNode || this.isBlocking !== this.isBlockingNode(nextProps) ||this.isNextPathNode(nextProps)!=this.isNextPathNode(nextProps) || this.isNextPathNode(this.props)!==this.isNextPathNode(nextProps);
-    */
+    return (
+      nextProps.vertices[this.props.row][this.props.col] !==
+      this.props.vertices[this.props.row][this.props.col]
+    );
   }
-
   render() {
     return (
       <div
@@ -59,9 +32,9 @@ class Node extends Component {
             ? classes.StartNode
             : this.isTargetNode(this.props)
             ? classes.TargetNode
-            : this.isNextPathNode(this.props) 
+            : this.isNextPathNode(this.props)
             ? classes.PathNode
-            : this.isNextAlgoNode(this.props) 
+            : this.isNextAlgoNode(this.props)
             ? classes.AlgoNode
             : this.isBlockingNode(this.props)
             ? classes.WeightedNode

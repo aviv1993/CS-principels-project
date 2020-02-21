@@ -3,10 +3,10 @@ import Toolbar from "../Navigation/Toolbar/Toolbar";
 import classes from "./Layout.module.css";
 
 const layout = props => (
-  <Fragment>
+  <div>
     <Toolbar />
     <main className={classes.Layout}>{props.children}</main>
-  </Fragment>
+  </div>
 );
 
 export default layout;

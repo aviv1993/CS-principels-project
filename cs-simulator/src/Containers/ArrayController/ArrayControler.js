@@ -4,7 +4,7 @@ import BuildControls from "../../Comp/BuildControls/BuildControls";
 import Modal from "../../Comp/UI/Modal/Modal";
 import InputError from "../../Comp/InputErrors/InputError";
 import axios from "axios";
-
+import { MAX_BAR, BAR_WIDTH } from "./constants";
 
 const algoNames = ["Naive Sort", "Bubble Sort", "Quick Sort", "Merge Sort"];
 
@@ -17,7 +17,8 @@ class ArrayBuilder extends Component {
     clickRunAlgo: false,
     runningAlgo: false,
     mustChooseAlgo: false,
-    currentActions: { action: [], marked: false }
+    currentActions: { action: [], marked: false },
+    sliderVal: 150
   };
 
   chooseAlgo = chosenIndex => {
@@ -34,7 +35,7 @@ class ArrayBuilder extends Component {
     const currVal = parseInt(this.currValToAdd);
 
     if (e.key === undefined || e.key === "Enter") {
-      if (isNaN(currVal) || currVal < 0 || currVal > 30) {
+      if (isNaN(currVal) || currVal < 0 || currVal > MAX_BAR) {
         this.setState({ valError: true });
       } else {
         let newArray = this.state.array.slice();
@@ -81,6 +82,8 @@ class ArrayBuilder extends Component {
     </Fragment>
   );
 
+  sliderHandler = event => this.setState({ sliderVal: event.target.value });
+
   addControls = () => (
     <div>
       <BuildControls
@@ -90,6 +93,8 @@ class ArrayBuilder extends Component {
         currAlgoIndex={this.state.chosenAlgo}
         clickRunHandler={this.clickRunAlgo}
         algoNames={algoNames}
+        sliderValue={this.state.sliderVal}
+        sliderHandler={this.sliderHandler}
       />
     </div>
   );
@@ -121,17 +126,17 @@ class ArrayBuilder extends Component {
 
   render() {
     return (
-      <Fragment>
+      <div>
         {this.addModalErrors()}
         {this.addVisualizedArray()}
         {this.addControls()}
-      </Fragment>
+      </div>
     );
   }
 
   startActions = actions => {
-    if (this.state.chosenAlgo !== -1 && actions["Actions"].length > 0) {
-      this.actions = actions["Actions"].slice();
+    if (this.state.chosenAlgo !== -1 && actions.length > 0) {
+      this.actions = actions.slice();
       this.setState({ clickRunAlgo: false, runningAlgo: true });
     } else if (this.state.chosenAlgo === -1) {
       this.setState({ clickRunAlgo: false, mustChooseAlgo: true });
@@ -178,7 +183,8 @@ class ArrayBuilder extends Component {
             "http://localhost:8080",
             JSON.stringify({
               array: this.state.array,
-              algo: this.state.chosenAlgo
+              algo: this.state.chosenAlgo,
+              isArray: true
             })
           )
           .then(repsonse => this.startActions(repsonse.data))
@@ -186,7 +192,7 @@ class ArrayBuilder extends Component {
       }
     }
     if (this.state.runningAlgo) {
-      setTimeout(() => this.runIteration(), 150);
+      setTimeout(() => this.runIteration(), this.state.sliderVal);
     }
   }
 }

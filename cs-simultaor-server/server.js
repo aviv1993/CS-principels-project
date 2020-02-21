@@ -13,6 +13,7 @@ const server = http.createServer(function(request, response) {
     request.on("data", function(data) {
       body += data;
       respEnd = handleData(JSON.parse(data));
+      console.log(respEnd);
     });
     request.on("end", function() {
       response.writeHead(200, { "Content-Type": "text/html" });
@@ -29,13 +30,12 @@ const handleData = data => {
       return [];
     }
   } else {
-    console.log(data["row"] + " " + data["col"]);
     return algoGraphFunctions[data["algo"]](
       data["row"],
       data["col"],
       data["startNode"],
       data["targetNode"],
-      data["blockingNodes"]
+      data["vertices"]
     );
   }
 };
@@ -62,7 +62,6 @@ const naiveSort = array => {
     }
     swap(array, i, min, actions);
   }
-  console.log(array);
   return actions;
 };
 
@@ -110,8 +109,8 @@ function quickSort(items, left, right, actions) {
 
 function partition(items, left, right, actions) {
   var pivot = items[Math.floor((right + left) / 2)], //middle element
-    i = left, //left pointer
-    j = right; //right pointer
+    i = left, //left poleter
+    j = right; //right poleter
   while (i <= j) {
     while (items[i] < pivot) {
       i++;
@@ -128,17 +127,59 @@ function partition(items, left, right, actions) {
   return i;
 }
 
-const bfs = (row,col,startNode, targetNode, blockingNodes) => {
-  const bfs = new BfsAlgo(row, col, blockingNodes, startNode, targetNode);
+function merge(arr, start, mid, end, output) {
+  let start2 = mid + 1;
+  while (start <= mid && start2 <= end) {
+    // If element 1 is in right place
+    if (arr[start] <= arr[start2]) {
+      start++;
+    } else {
+      let value = arr[start2];
+      let index = start2;
+      // Shift all the elements between element 1
+      // element 2, right by 1.
+      while (index != start) {
+        arr[index] = arr[index - 1];
+        index--;
+      }
+      arr[start] = value;
+
+      // Update all the poleters
+      start++;
+      mid++;
+      start2++;
+    }
+  }
+}
+
+function mergeSortImple(arr, l, r, output) {
+  if (l < r) {
+    // Same as (l + r) / 2, but avoids overflow
+    // for large l and r
+    let m = l + (r - l) / 2;
+    // Sort first and second halves
+    mergeSortImple(arr, l, m, output);
+    mergeSortImple(arr, m + 1, r, output);
+    merge(arr, l, m, r, output);
+  }
+}
+
+function mergeSort(arr) {
+  const output = [];
+  mergeSortImple(arr, 0, arr.length - 1, output);
+}
+
+const bfs = (row, col, startNode, targetNode, vertices) => {
+  const bfs = new BfsAlgo(row, col, vertices, startNode, targetNode);
   const output = bfs.run();
   return output;
 };
 
-const dfs = (row,col,startNode, targetNode, blockingNodes) => {
-  const dfs = new DfsAlgo(row, col, blockingNodes, startNode, targetNode);
+const dfs = (row, col, startNode, targetNode, vertices) => {
+  const dfs = new DfsAlgo(row, col, vertices, startNode, targetNode);
   const output = dfs.run();
   return output;
 };
- 
+
 const algoArrayFunctions = [naiveSort, bubbleSort, quickSortImple];
-const algoGraphFunctions = [bfs,dfs];
+const algoGraphFunctions = [bfs, dfs];

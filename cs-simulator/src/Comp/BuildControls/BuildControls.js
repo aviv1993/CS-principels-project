@@ -3,10 +3,9 @@ import BuildControl from "./BuildControl/BuildControl";
 import AlgoControl from "./AlgoControl/AlgoControl";
 import classes from "./BuildControls.module.css";
 import classes2 from "./AlgoControl/AlgoControl.module.css";
+import Slider from "./Slider/Slider";
 
-const algoButtons = ["Naive Sort", "Bubble Sort", "Quick Sort", "Merge Sort"];
-
-const getAlgoButtons = (currIndex, handler,algoNames) =>
+const getAlgoButtons = (currIndex, handler, algoNames) =>
   algoNames.map((name, i) => (
     <AlgoControl
       key={name}
@@ -16,7 +15,9 @@ const getAlgoButtons = (currIndex, handler,algoNames) =>
       clickHandler={handler}
     />
   ));
-
+const getSlider = props => (
+  <Slider sliderValue={props.sliderValue} sliderHandler={props.sliderHandler} />
+);
 const buildControls = props => {
   return (
     <div className={classes.BuildControls}>
@@ -30,8 +31,13 @@ const buildControls = props => {
         />
       )}
       <div style={{ display: "flex" }}>
-        {getAlgoButtons(props.currAlgoIndex, props.algoClickHandler,props.algoNames)}
+        {getAlgoButtons(
+          props.currAlgoIndex,
+          props.algoClickHandler,
+          props.algoNames
+        )}
       </div>
+      {getSlider(props)}
       <div className={classes2.AlgoControl}>
         <button onClick={props.clickRunHandler}>RUN!</button>
       </div>

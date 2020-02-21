@@ -1,17 +1,8 @@
 .Node {
   background-color: (255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  text-align: center;
-}
-
-.PathNode {
-  background-color: yellow;
   border: 0.2px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
   text-align: center;
-  animation-name: pathNode;
-  animation-duration: 1s;
 }
 
 .StartNode {
@@ -32,6 +23,15 @@
   animation-duration: 1s;
 }
 
+.PathNode {
+  background-color: yellow;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+  animation-name: pathNode;
+  animation-duration: 1s;
+}
+
 .WeightedNode {
   background-color: rgb(29, 26, 26);
   border: 0.2px solid rgba(0, 0, 0, 0.8);
@@ -42,7 +42,7 @@
 
 .AlgoNode {
   background-color: blue;
-  border: 1px solid grey;
+  border: 0.2px solid grey;
   padding: 20px;
   text-align: center;
   animation-name: algoNode;
@@ -85,10 +85,9 @@
   }
 }
 
-
 @keyframes pathNode {
   from {
-    background-color:blue;
+    background-color: blue;
   }
   to {
     background-color: yellow;

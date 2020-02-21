@@ -8,8 +8,8 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        {/*<ArrayControler />*/}
-        {<GraphController />}
+        {<ArrayControler />}
+        {/*<GraphController />*/}
       </Layout>
     </div>
   );
