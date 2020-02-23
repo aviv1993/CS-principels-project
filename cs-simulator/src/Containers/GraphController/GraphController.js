@@ -186,11 +186,13 @@ class GraphController extends Component {
         Math.round(Math.random() * (this.cols - 1))
       ];
       const newVertices = [];
-      const nodes = [SIMPLE_NODE, BLOCK_NODE];
+      const nodes = [SIMPLE_NODE, BLOCK_NODE, WEIGHTED_NODE];
       for (var i = 0; i < this.rows; i++) {
         const row_i = [];
         for (var j = 0; j < this.cols; j++) {
-          row_i.push(nodes[Math.random() >= 0.7 ? 1 : 0]);
+          row_i.push(
+            nodes[Math.random() >= 0.7 ? (Math.random() >= 0.5 ? 1 : 2) : 0]
+          );
         }
         newVertices.push(row_i);
       }
