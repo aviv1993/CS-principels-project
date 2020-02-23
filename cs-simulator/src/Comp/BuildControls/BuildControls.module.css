@@ -6,3 +6,55 @@
   align-items: center;
   padding: 1% 0px;
 }
+
+.Run button {
+  position: relative;
+  background-color: #4caf50;
+  font-size: 13px;
+  color: #ffffff;
+  padding: 20px;
+  width: 100%;
+  text-align: center;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid black;
+}
+
+.Run button:after {
+  content: "";
+  background: #90ee90;
+  display: block;
+  position: absolute;
+  padding-top: 300%;
+  padding-left: 350%;
+  margin-left: -20px !important;
+  margin-top: -120%;
+  opacity: 0;
+  transition: all 0.8s;
+}
+
+.Run button:active:after {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  transition: 0s;
+}
+
+.Random button {
+  display: block;
+  font: inherit;
+  padding: 3%;
+  margin: 10px;
+  width: 140px;
+  border: 2px solid rgb(22, 22, 53);
+  cursor: pointer;
+  outline: none;
+  background-color: white;
+}
+.Random button:hover {
+  background-color: grey;
+  border: 2px solid black;
+}

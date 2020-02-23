@@ -5,11 +5,11 @@ const DfsAlgoObject = require("./dfs");
 const DfsAlgo = DfsAlgoObject.DfsAlgo;
 
 const http = require("http");
+/*
 const server = http.createServer(function(request, response) {
   response.setHeader("Access-Control-Allow-Origin", request.headers.origin);
   let respEnd = [];
-  console.log("DATA");
-  if (request.method == "POST") {
+  if (request.method === "POST") {
     var body = "";
     request.on("data", function(data) {
       body += data;
@@ -20,7 +20,7 @@ const server = http.createServer(function(request, response) {
       response.end(JSON.stringify(respEnd));
     });
   }
-});
+});*/
 
 const handleData = data => {
   if (data["isArray"]) {
@@ -46,11 +46,6 @@ const swap = (array, i, j, actions) => {
   array[j] = tmpVal;
   actions.push({ action: [i, j], marked: false });
 };
-
-const port = 8080;
-const host = "127.0.0.1";
-server.listen(port, host);
-console.log(`Listening at http://${host}:${port}`);
 
 /////////////// Naive Sort : ///////////////////
 const naiveSort = array => {
@@ -138,7 +133,7 @@ function merge(arr, start, mid, end, output) {
       let index = start2;
       // Shift all the elements between element 1
       // element 2, right by 1.
-      while (index != start) {
+      while (index !== start) {
         swap(arr, index, index - 1, output);
         index--;
       }
@@ -184,3 +179,5 @@ const dfs = (row, col, startNode, targetNode, vertices) => {
 
 const algoArrayFunctions = [naiveSort, bubbleSort, quickSortImple, mergeSort];
 const algoGraphFunctions = [bfs, dfs];
+
+module.exports = { handleData };

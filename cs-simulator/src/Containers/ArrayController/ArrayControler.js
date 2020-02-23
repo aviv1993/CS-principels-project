@@ -4,8 +4,7 @@ import BuildControls from "../../Comp/BuildControls/BuildControls";
 import Modal from "../../Comp/UI/Modal/Modal";
 import InputError from "../../Comp/InputErrors/InputError";
 import axios from "axios";
-import { MAX_BAR, BAR_WIDTH } from "./constants";
-
+import { MAX_BAR } from "./constants";
 const algoNames = ["Naive Sort", "Bubble Sort", "Quick Sort", "Merge Sort"];
 
 class ArrayBuilder extends Component {
@@ -22,40 +21,30 @@ class ArrayBuilder extends Component {
   };
 
   chooseAlgo = chosenIndex => {
-    const parsedIndex = parseInt(chosenIndex);
-    const prevIndex = this.state.chosenAlgo;
-    this.setState({ chosenAlgo: parsedIndex === prevIndex ? -1 : parsedIndex });
+    if (!this.state.runningAlgo) {
+      const parsedIndex = parseInt(chosenIndex);
+      const prevIndex = this.state.chosenAlgo;
+      this.setState({
+        chosenAlgo: parsedIndex === prevIndex ? -1 : parsedIndex
+      });
+    }
   };
 
   handleInputVal = event => (this.currValToAdd = event.target.value);
 
-  handleRemoveIndex = event => (this.currIndexToRemove = event.target.value);
-
   handleConfirmAdd = e => {
-    const currVal = parseInt(this.currValToAdd);
+    if (!this.state.runningAlgo) {
+      const currVal = parseInt(this.currValToAdd);
 
-    if (e.key === undefined || e.key === "Enter") {
-      if (isNaN(currVal) || currVal < 0 || currVal > MAX_BAR) {
-        this.setState({ valError: true });
-      } else {
-        let newArray = this.state.array.slice();
-        newArray.push(currVal);
-        this.setState({ array: newArray, valError: false });
+      if (e.key === undefined || e.key === "Enter") {
+        if (isNaN(currVal) || currVal < 0 || currVal > MAX_BAR) {
+          this.setState({ valError: true });
+        } else {
+          let newArray = this.state.array.slice();
+          newArray.push(currVal);
+          this.setState({ array: newArray, valError: false });
+        }
       }
-    }
-  };
-  handleConfirmedRemove = () => {
-    const indexToRemove = parseInt(this.currIndexToRemove);
-    if (
-      isNaN(indexToRemove) ||
-      indexToRemove < 0 ||
-      indexToRemove >= this.state.array.length
-    )
-      this.setState({ removeError: true });
-    else {
-      let newArray = this.state.array.slice();
-      newArray.splice(indexToRemove, 1);
-      this.setState({ array: newArray, removeError: false });
     }
   };
 
@@ -82,11 +71,21 @@ class ArrayBuilder extends Component {
     </Fragment>
   );
 
-  sliderHandler = event => this.setState({ sliderVal: event.target.value });
-
+  sliderHandler = event => {
+    if (!this.state.runningAlgo)
+      this.setState({ sliderVal: event.target.value });
+  };
+  randomArray = () => {
+    if (this.state.runningAlgo) {
+      const array = [];
+      for (var i = 0; i < 30; i++) array[i] = Math.floor(25 * Math.random());
+      this.setState({ array: array });
+    }
+  };
   addControls = () => (
     <div>
       <BuildControls
+        randomHandler={this.randomArray}
         addHandler={this.handleInputVal}
         addConfirmHandler={this.handleConfirmAdd}
         algoClickHandler={this.chooseAlgo}
@@ -115,13 +114,15 @@ class ArrayBuilder extends Component {
   };
 
   removeBarByClick = indexToRemove => {
-    let newArray = this.state.array.slice();
-    newArray.splice(indexToRemove, 1);
-    this.setState({ array: newArray, removeError: false });
+    if (!this.state.runningAlgo) {
+      let newArray = this.state.array.slice();
+      newArray.splice(indexToRemove, 1);
+      this.setState({ array: newArray, removeError: false });
+    }
   };
 
   clickRunAlgo = () => {
-    this.setState({ clickRunAlgo: true });
+    if (!this.state.runningAlgo) this.setState({ clickRunAlgo: true });
   };
 
   render() {
@@ -179,16 +180,15 @@ class ArrayBuilder extends Component {
         this.setState({ clickRunAlgo: false, mustChooseAlgo: true });
       else {
         axios
-          .post(
-            "http://localhost:8080",
-            JSON.stringify({
-              array: this.state.array,
-              algo: this.state.chosenAlgo,
-              isArray: true
-            })
-          )
-          .then(repsonse => this.startActions(repsonse.data))
-          .catch(error => console.log(error));
+          .post("https://us-central1-cs-server-fe37c.cloudfunctions.net/api/", {
+            array: this.state.array,
+            algo: this.state.chosenAlgo,
+            isArray: true
+          })
+          .then(repsonse => {
+            this.startActions(repsonse.data);
+          })
+          .catch(error => console.log("ERROR"));
       }
     }
     if (this.state.runningAlgo) {

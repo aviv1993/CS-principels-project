@@ -11,6 +11,9 @@ const buildControl = props => {
         onChange={props.handleFirst}
       />
       <button onClick={props.handleSecond}> {props.label2} </button>
+      <button onClick={props.randomHandler} style={{ width: "200px" }}>
+        Random Array
+      </button>
     </div>
   );
 };

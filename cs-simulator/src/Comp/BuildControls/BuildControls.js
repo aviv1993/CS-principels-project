@@ -22,13 +22,21 @@ const buildControls = props => {
   return (
     <div className={classes.BuildControls}>
       {props.addHandler === undefined ? null : (
-        <BuildControl
-          label1={"Value:"}
-          label2={"Add"}
-          inputType={"number"}
-          handleFirst={props.addHandler}
-          handleSecond={props.addConfirmHandler}
-        />
+        <div>
+          <BuildControl
+            label1={"Value:"}
+            label2={"Add"}
+            inputType={"number"}
+            handleFirst={props.addHandler}
+            handleSecond={props.addConfirmHandler}
+            randomHandler={props.randomHandler}
+          />
+        </div>
+      )}
+      {props.addHandler !== undefined ? null : (
+        <div className={classes.Random}>
+          <button onClick={props.randomHandler}>Random Graph</button>
+        </div>
       )}
       <div style={{ display: "flex" }}>
         {getAlgoButtons(
@@ -38,7 +46,7 @@ const buildControls = props => {
         )}
       </div>
       {getSlider(props)}
-      <div className={classes2.AlgoControl}>
+      <div className={classes.Run}>
         <button onClick={props.clickRunHandler}>RUN!</button>
       </div>
     </div>

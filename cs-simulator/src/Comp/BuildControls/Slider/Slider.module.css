@@ -9,6 +9,7 @@
 .Slider {
   -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
+  margin: 2%;
   width: 100%; /* Full-width */
   height: 20px; /* Specified height */
   background: white; /* Grey background */

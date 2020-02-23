@@ -2,6 +2,8 @@ import React, { Component, Fragment } from "react";
 import Board from "../../Comp/VisualGraph/Board/Board";
 import BuildControls from "../../Comp/BuildControls/BuildControls";
 import axios from "axios";
+import Modal from "../../Comp/UI/Modal/Modal";
+import InputError from "../../Comp/InputErrors/InputError";
 import {
   SIMPLE_NODE,
   START_NODE,
@@ -31,6 +33,7 @@ class GraphController extends Component {
 
   state = {
     vertices: this.initVertices(),
+    //Start and Target Node :
     startNode: [0, 0],
     targetNode: [0, 15],
     //hovering booleans :
@@ -43,6 +46,7 @@ class GraphController extends Component {
     mustChooseAlgo: false,
     runningAlgo: false,
     runPathAlgo: false,
+    finishedAlgoAndPath: false,
     //Slider:
     sliderVal: 5
   };
@@ -54,12 +58,28 @@ class GraphController extends Component {
 
   //Handels a single click on a single node.
   nodeClicked = (row, col) => {
-    if (!this.isStartNode(row, col) && !this.isTargetNode(row, col)) {
+    if (
+      !this.isStartNode(row, col) &&
+      !this.isTargetNode(row, col) &&
+      !this.state.runningAlgo &&
+      !this.state.runPathAlgo &&
+      !this.state.finishedAlgoAndPath
+    ) {
       const val =
         this.state.vertices[row][col] === BLOCK_NODE ? SIMPLE_NODE : BLOCK_NODE;
       const newVertices = this.state.vertices.map(elem => elem.slice()).slice();
       newVertices[row][col] = val;
-      this.setState({ vertices: newVertices });
+      this.setState({
+        vertices: newVertices,
+        hoveringOnNode: false,
+        hoveringOnStartNode: false,
+        hoveringOnTargetNode: false
+      });
+    } else if (this.state.finishedAlgoAndPath) {
+      this.setState({
+        vertices: this.initVertices(),
+        finishedAlgoAndPath: false
+      });
     }
   };
 
@@ -98,14 +118,20 @@ class GraphController extends Component {
 
   //Activate and disabling hovering mode, dependes on which node the hover starts
   hoveringOnNodes = (row, col, simple) => {
-    const hoverOnNode = !this.state.hoveringOnNode;
-    const hoveringOnStartNode = this.isStartNode(row, col) && hoverOnNode;
-    const hoveringOnTargetNode = this.isTargetNode(row, col) && hoverOnNode;
-    this.setState({
-      hoveringOnNode: hoverOnNode,
-      hoveringOnStartNode: hoveringOnStartNode,
-      hoveringOnTargetNode: hoveringOnTargetNode
-    });
+    if (
+      !this.state.runPathAlgo &&
+      !this.state.runningAlgo &&
+      !this.state.finishedAlgoAndPath
+    ) {
+      const hoverOnNode = !this.state.hoveringOnNode;
+      const hoveringOnStartNode = this.isStartNode(row, col) && hoverOnNode;
+      const hoveringOnTargetNode = this.isTargetNode(row, col) && hoverOnNode;
+      this.setState({
+        hoveringOnNode: hoverOnNode,
+        hoveringOnStartNode: hoveringOnStartNode,
+        hoveringOnTargetNode: hoveringOnTargetNode
+      });
+    }
   };
 
   mouseLeave = () => {
@@ -129,7 +155,9 @@ class GraphController extends Component {
   );
 
   clickRunAlgo = () => {
-    this.setState({ clickRunAlgo: true });
+    if (!this.state.runningAlgo && !this.state.runPathAlgo) {
+      this.setState({ clickRunAlgo: true });
+    }
   };
 
   chooseAlgo = chosenIndex => {
@@ -138,11 +166,43 @@ class GraphController extends Component {
     this.setState({ chosenAlgo: parsedIndex === prevIndex ? -1 : parsedIndex });
   };
 
-  sliderHandler = event => this.setState({ sliderVal: event.target.value });
+  sliderHandler = event => {
+    if (!this.state.runPathAlgo && !this.state.runningAlgo)
+      this.setState({ sliderVal: event.target.value });
+  };
 
+  randomGraph = () => {
+    if (!this.state.runningAlgo) {
+      const startNode = [
+        Math.round(Math.random() * (this.rows - 1)),
+        Math.round(Math.random() * (this.cols - 1))
+      ];
+      const targetNode = [
+        Math.round(Math.random() * (this.rows - 1)),
+        Math.round(Math.random() * (this.cols - 1))
+      ];
+      const newVertices = [];
+      const nodes = [SIMPLE_NODE, BLOCK_NODE];
+      for (var i = 0; i < this.rows; i++) {
+        const row_i = [];
+        for (var j = 0; j < this.cols; j++) {
+          row_i.push(nodes[Math.random() >= 0.7 ? 1 : 0]);
+        }
+        newVertices.push(row_i);
+      }
+      newVertices[startNode[0]][startNode[1]] = START_NODE;
+      newVertices[targetNode[0]][targetNode[1]] = TARGET_NODE;
+      this.setState({
+        vertices: newVertices,
+        startNode: startNode,
+        targetNode: targetNode
+      });
+    }
+  };
   addControls = () => (
     <div>
       <BuildControls
+        randomHandler={this.randomGraph}
         algoClickHandler={this.chooseAlgo}
         currAlgoIndex={this.state.chosenAlgo}
         clickRunHandler={this.clickRunAlgo}
@@ -152,8 +212,25 @@ class GraphController extends Component {
       />
     </div>
   );
+
+  backDropClick = stateKey => {
+    let newState = Object.assign({}, this.state);
+    newState[stateKey] = false;
+    this.setState(newState);
+  };
+
+  addModalErrors = () => (
+    <Modal
+      show={this.state.mustChooseAlgo}
+      backDropClick={() => this.backDropClick("mustChooseAlgo")}
+    >
+      <InputError label={"Choose An Algorithm"} />
+    </Modal>
+  );
+
   render = () => (
     <Fragment>
+      {this.addModalErrors()}
       {this.getBoard()}
       {this.addControls()}
     </Fragment>
@@ -176,36 +253,39 @@ class GraphController extends Component {
 
   runIteration(isPath) {
     const currentArray = isPath ? this.path : this.actions;
-    const nextNode = currentArray.shift();
-    const nodeVal = this.isStartNode(nextNode[0], nextNode[1])
-      ? START_NODE
-      : this.isTargetNode(...nextNode)
-      ? TARGET_NODE
-      : isPath
-      ? PATH_NODE
-      : ALGO_NODE;
-    const newVertices = this.state.vertices.map(elem => elem.slice()).slice();
-    newVertices[nextNode[0]][nextNode[1]] = nodeVal;
     if (currentArray.length > 0) {
-      this.setState({ vertices: newVertices });
-    } else {
-      if (isPath)
-        this.setState({
-          vertices: newVertices,
-          runningAlgo: false,
-          runPathAlgo: false
-        });
-      else
-        this.setState({
-          vertices: newVertices,
-          runningAlgo: false,
-          runPathAlgo: true
-        });
+      const nextNode = currentArray.shift();
+      const nodeVal = this.isStartNode(nextNode[0], nextNode[1])
+        ? START_NODE
+        : this.isTargetNode(...nextNode)
+        ? TARGET_NODE
+        : isPath
+        ? PATH_NODE
+        : ALGO_NODE;
+      const newVertices = this.state.vertices.map(elem => elem.slice()).slice();
+      newVertices[nextNode[0]][nextNode[1]] = nodeVal;
+      if (currentArray.length > 0) {
+        this.setState({ vertices: newVertices });
+      } else {
+        if (isPath)
+          this.setState({
+            vertices: newVertices,
+            runningAlgo: false,
+            runPathAlgo: false,
+            finishedAlgoAndPath: true
+          });
+        else
+          this.setState({
+            vertices: newVertices,
+            runningAlgo: false,
+            runPathAlgo: true
+          });
+      }
     }
   }
 
-  getPostJSON = () =>
-    JSON.stringify({
+  getPostJSON = () => {
+    return {
       algo: this.state.chosenAlgo,
       vertices: this.state.vertices,
       startNode: this.state.startNode,
@@ -214,7 +294,8 @@ class GraphController extends Component {
       isGraph: true,
       row: this.rows,
       col: this.cols
-    });
+    };
+  };
 
   componentDidUpdate() {
     if (this.state.clickRunAlgo) {
@@ -222,7 +303,10 @@ class GraphController extends Component {
         this.setState({ clickRunAlgo: false, mustChooseAlgo: true });
       else {
         axios
-          .post("http://localhost:8080", this.getPostJSON())
+          .post(
+            "https://us-central1-cs-server-fe37c.cloudfunctions.net/api/graph-controller",
+            this.getPostJSON()
+          )
           .then(repsonse => this.startActions(repsonse.data))
           .catch(error => console.log(error));
       }
