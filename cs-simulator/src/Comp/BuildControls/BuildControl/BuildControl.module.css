@@ -37,3 +37,16 @@
 .BuildControl input:hover {
   border: 1px solid black;
 }
+
+.ChooseNode {
+  display: grid;
+  grid-template-columns: auto auto;
+  background-color: white;
+}
+
+.Node {
+  background-color: green;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+}

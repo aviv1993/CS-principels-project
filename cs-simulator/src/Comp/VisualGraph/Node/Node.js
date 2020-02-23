@@ -5,12 +5,15 @@ import {
   TARGET_NODE,
   BLOCK_NODE,
   ALGO_NODE,
-  PATH_NODE
+  PATH_NODE,
+  WEIGHTED_NODE
 } from "../../../Containers/GraphController/Constants";
 
 class Node extends Component {
   isStartNode = props => props.vertices[props.row][props.col] === START_NODE;
   isTargetNode = props => props.vertices[props.row][props.col] === TARGET_NODE;
+  isWeightedNode = props =>
+    props.vertices[props.row][props.col] === WEIGHTED_NODE;
   isBlockingNode = props => {
     this.isBlocking = props.vertices[props.row][props.col] === BLOCK_NODE;
     return this.isBlocking;
@@ -37,6 +40,8 @@ class Node extends Component {
             : this.isNextAlgoNode(this.props)
             ? classes.AlgoNode
             : this.isBlockingNode(this.props)
+            ? classes.BlockingNode
+            : this.isWeightedNode(this.props)
             ? classes.WeightedNode
             : classes.Node
         }

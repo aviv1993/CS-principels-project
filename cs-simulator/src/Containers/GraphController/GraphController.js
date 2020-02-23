@@ -10,7 +10,8 @@ import {
   TARGET_NODE,
   BLOCK_NODE,
   ALGO_NODE,
-  PATH_NODE
+  PATH_NODE,
+  WEIGHTED_NODE
 } from "./Constants";
 import classes from "./GraphController.module.css";
 
@@ -36,6 +37,7 @@ class GraphController extends Component {
     //Start and Target Node :
     startNode: [0, 0],
     targetNode: [0, 15],
+    nodeType: BLOCK_NODE,
     //hovering booleans :
     hoveringOnNode: false,
     hoveringOnTargetNode: false,
@@ -66,7 +68,9 @@ class GraphController extends Component {
       !this.state.finishedAlgoAndPath
     ) {
       const val =
-        this.state.vertices[row][col] === BLOCK_NODE ? SIMPLE_NODE : BLOCK_NODE;
+        this.state.vertices[row][col] === this.state.nodeType
+          ? SIMPLE_NODE
+          : this.state.nodeType;
       const newVertices = this.state.vertices.map(elem => elem.slice()).slice();
       newVertices[row][col] = val;
       this.setState({
@@ -94,9 +98,9 @@ class GraphController extends Component {
         ? START_NODE
         : this.state.hoveringOnTargetNode
         ? TARGET_NODE
-        : this.state.vertices[row][col] === BLOCK_NODE
+        : this.state.vertices[row][col] === this.state.nodeType
         ? SIMPLE_NODE
-        : BLOCK_NODE;
+        : this.state.nodeType;
       if (this.state.hoveringOnStartNode) {
         newVertices[this.state.startNode[0]][
           this.state.startNode[1]
@@ -199,6 +203,10 @@ class GraphController extends Component {
       });
     }
   };
+
+  chooseNodeType = newType =>
+    !this.state.runningAlgo ? this.setState({ nodeType: newType }) : null;
+
   addControls = () => (
     <div>
       <BuildControls
@@ -209,6 +217,8 @@ class GraphController extends Component {
         algoNames={algoNames}
         sliderValue={this.state.sliderVal}
         sliderHandler={this.sliderHandler}
+        currNodeType={this.state.nodeType}
+        nodeTypeHandler={this.chooseNodeType}
       />
     </div>
   );

@@ -32,12 +32,20 @@
   animation-duration: 1s;
 }
 
-.WeightedNode {
+.BlockingNode {
   background-color: rgb(29, 26, 26);
   border: 0.2px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
-  animation-name: weightedNode;
+  animation-name: blockingdNode;
   animation-duration: 1s;
+}
+
+.WeightedNode {
+  background-color: lightsalmon;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  animation-name: weightedNode;
+  animation-duration: 0.5s;
 }
 
 .AlgoNode {
@@ -49,7 +57,7 @@
   animation-duration: 5s;
 }
 
-@keyframes weightedNode {
+@keyframes blockingdNode {
   from {
     background-color: rgb(170, 170, 170);
   }
@@ -91,5 +99,14 @@
   }
   to {
     background-color: yellow;
+  }
+}
+
+@keyframes weightedNode {
+  from {
+    background-color: white;
+  }
+  to {
+    background-color: lightsalmon;
   }
 }
