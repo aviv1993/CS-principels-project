@@ -9,8 +9,8 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        <Route path="/" exact component={ArrayControler} />
-        <Route path="/graph-controller" exact component={GraphController} />
+        <Route path="/" exact component={GraphController} />
+        <Route path="/array-controller" exact component={ArrayControler} />
         <Route path="/about-me" exact component={GraphController} />
       </Layout>
     </div>

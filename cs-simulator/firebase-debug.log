@@ -1,0 +1,37 @@
+[debug] [2020-02-24T20:43:52.555Z] ----------------------------------------------------------------------
+[debug] [2020-02-24T20:43:52.557Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2020-02-24T20:43:52.557Z] CLI Version:   7.13.1
+[debug] [2020-02-24T20:43:52.557Z] Platform:      darwin
+[debug] [2020-02-24T20:43:52.557Z] Node Version:  v10.16.0
+[debug] [2020-02-24T20:43:52.557Z] Time:          Mon Feb 24 2020 22:43:52 GMT+0200 (Israel Standard Time)
+[debug] [2020-02-24T20:43:52.558Z] ----------------------------------------------------------------------
+[debug] [2020-02-24T20:43:52.558Z] 
+[debug] [2020-02-24T20:43:52.567Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-24T20:43:52.568Z] > authorizing via signed-in user
+[debug] [2020-02-24T20:43:52.568Z] [iam] checking project cs-principles-project for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-02-24T20:43:52.569Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-02-24T20:43:52.570Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-02-24T20:43:53.637Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-24T20:43:53.647Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/cs-principles-project:testIamPermissions  
+
+[debug] [2020-02-24T20:43:54.903Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-24T20:43:54.906Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/cs-principles-project  
+ 
+[debug] [2020-02-24T20:43:56.640Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'cs-principles-project'...
+[info] 
+[info] i  deploying hosting
+[debug] [2020-02-24T20:43:56.646Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/cs-principles-project/versions  
+
+[debug] [2020-02-24T20:43:59.020Z] <<< HTTP RESPONSE 200
+[info] i  hosting[cs-principles-project]: beginning deploy...
+[info] i  hosting[cs-principles-project]: found 19 files in build
+[debug] [2020-02-24T20:43:59.134Z] [hosting] hash cache [YnVpbGQ] stored for 19 files
+[debug] [2020-02-24T20:43:59.134Z] [hosting][hash queue][FINAL]
+[debug] [2020-02-24T20:43:59.134Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/cs-principles-project/versions/9104914be99e60b4:populateFiles  
+ <request body omitted>
+[debug] [2020-02-24T20:44:00.983Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-24T20:44:00.990Z] [hosting][populate queue][FINAL]
+[debug] [2020-02-24T20:44:00.990Z] [hosting] uploads queued: 6

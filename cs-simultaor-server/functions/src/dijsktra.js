@@ -77,7 +77,7 @@ class DijAlgo {
     this.init();
     while (!this.heap.isEmpty()) {
       const currNode = this.heap.pop();
-      if (currNode.dist != MAX_VALUE) {
+      if (currNode.dist !== MAX_VALUE) {
         const row = currNode.node[0];
         const col = currNode.node[1];
         this.output.push(currNode.node);

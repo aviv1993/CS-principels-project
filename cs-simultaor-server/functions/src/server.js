@@ -4,6 +4,9 @@ const BfsAlgo = BfsAlgoObject.BfsAlgo;
 const DfsAlgoObject = require("./dfs");
 const DfsAlgo = DfsAlgoObject.DfsAlgo;
 
+const DijAlgoObject = require("./dijsktra");
+const DijAlgo = DijAlgoObject.DijAlgo;
+
 const http = require("http");
 /*
 const server = http.createServer(function(request, response) {

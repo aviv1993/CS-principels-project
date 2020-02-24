@@ -76,7 +76,7 @@ class ArrayBuilder extends Component {
       this.setState({ sliderVal: event.target.value });
   };
   randomArray = () => {
-    if (this.state.runningAlgo) {
+    if (!this.state.runningAlgo) {
       const array = [];
       for (var i = 0; i < 30; i++) array[i] = Math.floor(25 * Math.random());
       this.setState({ array: array });
