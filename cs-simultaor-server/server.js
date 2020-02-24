@@ -4,16 +4,19 @@ const BfsAlgo = BfsAlgoObject.BfsAlgo;
 const DfsAlgoObject = require("./dfs");
 const DfsAlgo = DfsAlgoObject.DfsAlgo;
 
+const DijAlgoObject = require("./dijsktra");
+const DijAlgo = DijAlgoObject.DijAlgo;
+
 const http = require("http");
 const server = http.createServer(function(request, response) {
   response.setHeader("Access-Control-Allow-Origin", request.headers.origin);
   let respEnd = [];
-  console.log("DATA");
   if (request.method == "POST") {
     var body = "";
     request.on("data", function(data) {
       body += data;
       respEnd = handleData(JSON.parse(data));
+      console.log(respEnd);
     });
     request.on("end", function() {
       response.writeHead(200, { "Content-Type": "text/html" });
@@ -182,5 +185,11 @@ const dfs = (row, col, startNode, targetNode, vertices) => {
   return output;
 };
 
+const dij = (row, col, startNode, targetNode, vertices) => {
+  const dfs = new DijAlgo(row, col, vertices, startNode, targetNode);
+  const output = dfs.run();
+  return output;
+};
+
 const algoArrayFunctions = [naiveSort, bubbleSort, quickSortImple, mergeSort];
-const algoGraphFunctions = [bfs, dfs];
+const algoGraphFunctions = [bfs, dfs, dij];

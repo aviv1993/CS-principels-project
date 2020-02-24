@@ -9,6 +9,7 @@ import { nodeColors } from "../../Containers/GraphController/Constants";
 const getNodeButtons = props =>
   nodeColors.map(elem => (
     <NodeButton
+      key={elem.color}
       nodeProps={elem}
       nodeTypeHandler={props.nodeTypeHandler}
       currNode={props.currNodeType}

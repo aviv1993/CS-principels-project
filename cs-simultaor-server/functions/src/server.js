@@ -177,7 +177,13 @@ const dfs = (row, col, startNode, targetNode, vertices) => {
   return output;
 };
 
+const dij = (row, col, startNode, targetNode, vertices) => {
+  const dfs = new DijAlgo(row, col, vertices, startNode, targetNode);
+  const output = dfs.run();
+  return output;
+};
+
 const algoArrayFunctions = [naiveSort, bubbleSort, quickSortImple, mergeSort];
-const algoGraphFunctions = [bfs, dfs];
+const algoGraphFunctions = [bfs, dfs, dij];
 
 module.exports = { handleData };

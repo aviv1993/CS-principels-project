@@ -13,9 +13,8 @@ import {
   PATH_NODE,
   WEIGHTED_NODE
 } from "./Constants";
-import classes from "./GraphController.module.css";
 
-const algoNames = ["BFS", "DFS", "A*"];
+const algoNames = ["BFS", "DFS", "Dijkstra"];
 class GraphController extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +56,8 @@ class GraphController extends Component {
     this.state.startNode[0] === row && this.state.startNode[1] === col;
   isTargetNode = (row, col) =>
     this.state.targetNode[0] === row && this.state.targetNode[1] === col;
-
+  isWeightedNode = (row, col) =>
+    this.state.vertices[row][col] === WEIGHTED_NODE;
   //Handels a single click on a single node.
   nodeClicked = (row, col) => {
     if (
@@ -267,7 +267,10 @@ class GraphController extends Component {
     const currentArray = isPath ? this.path : this.actions;
     if (currentArray.length > 0) {
       const nextNode = currentArray.shift();
-      const nodeVal = this.isStartNode(nextNode[0], nextNode[1])
+      let nodeVal = this.isWeightedNode(nextNode[0], nextNode[1])
+        ? WEIGHTED_NODE
+        : 1;
+      nodeVal *= this.isStartNode(nextNode[0], nextNode[1])
         ? START_NODE
         : this.isTargetNode(...nextNode)
         ? TARGET_NODE
@@ -296,7 +299,7 @@ class GraphController extends Component {
     }
   }
 
-  getPostJSON = () => {
+  getPost = () => {
     return {
       algo: this.state.chosenAlgo,
       vertices: this.state.vertices,
@@ -314,10 +317,17 @@ class GraphController extends Component {
       if (this.state.chosenAlgo === -1)
         this.setState({ clickRunAlgo: false, mustChooseAlgo: true });
       else {
+        /*
+          Remove JSON.stringify and change address to deploy:
+          "https://us-central1-cs-server-fe37c.cloudfunctions.net/api/graph-controller"
+          
+          add JSON.string and change address for testing :
+          "http://localhost:8080"
+         */
         axios
           .post(
             "https://us-central1-cs-server-fe37c.cloudfunctions.net/api/graph-controller",
-            this.getPostJSON()
+            this.getPost()
           )
           .then(repsonse => this.startActions(repsonse.data))
           .catch(error => console.log(error));

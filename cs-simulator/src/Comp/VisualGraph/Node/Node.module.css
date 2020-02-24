@@ -57,6 +57,22 @@
   animation-duration: 5s;
 }
 
+.WeightedAlgoNode {
+  background-color: turquoise;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+  animation-name: weightedAlgoNode;
+  animation-duration: 5s;
+}
+
+.WeightedPathNode {
+  background-color: purple;
+  border: 0.2px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+}
+
 @keyframes blockingdNode {
   from {
     background-color: rgb(170, 170, 170);
@@ -108,5 +124,14 @@
   }
   to {
     background-color: lightsalmon;
+  }
+}
+
+@keyframes weightedAlgoNode {
+  from {
+    background-color: lightsalmon;
+  }
+  to {
+    background-color: turquoise;
   }
 }
